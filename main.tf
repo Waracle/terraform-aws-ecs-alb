@@ -141,8 +141,8 @@ resource "aws_lb_target_group" "lb_http_tgs" {
     for name, config in var.http_ports : name => config
     if lookup(config, "type", "") == "" || lookup(config, "type", "") == "forward"
   }
-  name                          = "${var.name_prefix}-http-${each.value.target_group_port}"
-  port                          = each.value.target_group_port
+  name                          = "${var.name_prefix}-http-${each.value.listener_port}"
+  port                          = each.value.listener_port
   protocol                      = "HTTP"
   vpc_id                        = var.vpc_id
   deregistration_delay          = var.deregistration_delay
@@ -166,11 +166,11 @@ resource "aws_lb_target_group" "lb_http_tgs" {
     unhealthy_threshold = var.target_group_health_check_unhealthy_threshold
     matcher             = var.target_group_health_check_matcher
   }
-  target_type = "ip"
+  target_type = var.target_group_target_type_http
   tags = merge(
     var.tags,
     {
-      Name = "${var.name_prefix}-http-${each.value.target_group_port}"
+      Name = "${var.name_prefix}-http-${each.value.listener_port}"
     },
   )
   lifecycle {
@@ -209,7 +209,7 @@ resource "aws_lb_target_group" "lb_https_tgs" {
     unhealthy_threshold = var.target_group_health_check_unhealthy_threshold
     matcher             = var.target_group_health_check_matcher
   }
-  target_type = "ip"
+  target_type = var.target_group_target_type_https
   tags = merge(
     var.tags,
     {

@@ -252,6 +252,18 @@ variable "target_group_health_check_matcher" {
   default     = "200"
 }
 
+variable "target_group_target_type_http" {
+  description = "(Optional) The target type to use for registering instances with the http listener."
+  type        = string
+  default     = "ip"
+}
+
+variable "target_group_target_type_https" {
+  description = "(Optional) The target type to use for registering instances with the https listener."
+  type        = string
+  default     = "ip"
+}
+
 variable "ssl_policy" {
   description = "(Optional) The name of the SSL Policy for the listener. . Required if var.https_ports is set."
   type        = string
